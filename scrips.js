@@ -43,6 +43,7 @@ const getMovies = async() => {
   }
 };
 
+
 const getMovieInfo = async(movie) => {
  const movieId = movie.id
  const movieEndpoint= `/movie/${movieId}`;
@@ -53,12 +54,34 @@ try{
   if(response.ok){
     const jsonResponse = await response.json();
     const movieInfo = jsonResponse  
+    console.log(movieInfo)
     return movieInfo
   }
 }catch(error){
   console.log(error)
 }
 };
+
+
+const getReleaseDate = async(movie)=>{
+    const movieId = movie.id
+    const movieReleaseEndpoint = `/movie/${movieId}/release_dates`
+    const requestParams = `?api_key=${tmdbKey}`
+    const urlToFetch = `${tmdbBaseUrl}${movieReleaseEndpoint}${requestParams}`;
+    try{
+        const response = fetch(urlToFetch);
+        if(response.ok){
+            const jsonResponse = await response.json();
+            const releaseDate = jsonResponse
+            return releaseDate;
+        }
+    }
+    catch(error){
+        console.log(error)
+    }
+
+}
+
 
 // Gets a list of movies and ultimately displays the info of a random movie from the list
 const showRandomMovie = async () => {
@@ -68,8 +91,9 @@ const showRandomMovie = async () => {
   };
   const movies = await getMovies();
   const randomMovie = getRandomMovie(movies);
-  const info = await getMovieInfo(randomMovie)
+  const info = await getMovieInfo(randomMovie);
   displayMovie(info)
+ 
 };
 
 getGenres().then(populateGenreDropdown);
